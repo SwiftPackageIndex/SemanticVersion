@@ -84,72 +84,72 @@ final class SemanticVersionTests: XCTestCase {
     }
 
     func test_init() throws {
-        XCTAssertEqual(SemVer("1.2.3"), SemVer(1, 2, 3))
-        XCTAssertEqual(SemVer("v1.2.3"), SemVer(1, 2, 3))
-        XCTAssertEqual(SemVer("1.2.3-rc"), SemVer(1, 2, 3, "rc"))
-        XCTAssertEqual(SemVer("v1.2.3-beta1"), SemVer(1, 2, 3, "beta1"))
-        XCTAssertEqual(SemVer("v1.2.3-beta1+build5"), SemVer(1, 2, 3, "beta1", "build5"))
-        XCTAssertEqual(SemVer(""), nil)
-        XCTAssertEqual(SemVer("1"), nil)
-        XCTAssertEqual(SemVer("1.2"), nil)
-        XCTAssertEqual(SemVer("1.2.3rc"), nil)
-        XCTAssertEqual(SemVer("swift-2.2-SNAPSHOT-2016-01-11-a"), nil)
+        XCTAssertEqual(SemanticVersion("1.2.3"), SemanticVersion(1, 2, 3))
+        XCTAssertEqual(SemanticVersion("v1.2.3"), SemanticVersion(1, 2, 3))
+        XCTAssertEqual(SemanticVersion("1.2.3-rc"), SemanticVersion(1, 2, 3, "rc"))
+        XCTAssertEqual(SemanticVersion("v1.2.3-beta1"), SemanticVersion(1, 2, 3, "beta1"))
+        XCTAssertEqual(SemanticVersion("v1.2.3-beta1+build5"), SemanticVersion(1, 2, 3, "beta1", "build5"))
+        XCTAssertEqual(SemanticVersion(""), nil)
+        XCTAssertEqual(SemanticVersion("1"), nil)
+        XCTAssertEqual(SemanticVersion("1.2"), nil)
+        XCTAssertEqual(SemanticVersion("1.2.3rc"), nil)
+        XCTAssertEqual(SemanticVersion("swift-2.2-SNAPSHOT-2016-01-11-a"), nil)
     }
 
     func test_description() throws {
-        XCTAssertEqual(SemVer("1.2.3")?.description, "1.2.3")
-        XCTAssertEqual(SemVer("v1.2.3")?.description, "1.2.3")
-        XCTAssertEqual(SemVer("1.2.3-beta1")?.description, "1.2.3-beta1")
-        XCTAssertEqual(SemVer("1.2.3-beta1+build")?.description, "1.2.3-beta1+build")
+        XCTAssertEqual(SemanticVersion("1.2.3")?.description, "1.2.3")
+        XCTAssertEqual(SemanticVersion("v1.2.3")?.description, "1.2.3")
+        XCTAssertEqual(SemanticVersion("1.2.3-beta1")?.description, "1.2.3-beta1")
+        XCTAssertEqual(SemanticVersion("1.2.3-beta1+build")?.description, "1.2.3-beta1+build")
     }
 
     func test_Comparable() throws {
-        XCTAssert(SemVer(1, 0, 0) < SemVer(2, 0, 0))
-        XCTAssert(SemVer(1, 0, 0) < SemVer(1, 1, 0))
-        XCTAssert(SemVer(1, 0, 0) < SemVer(1, 0, 1))
-        XCTAssert(SemVer(1, 0, 0, "a") < SemVer(1, 0, 0, "b"))
-        XCTAssert(SemVer(1, 0, 0, "a", "a") < SemVer(1, 0, 0, "a", "b"))
+        XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(2, 0, 0))
+        XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 1, 0))
+        XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 0, 1))
+        XCTAssert(SemanticVersion(1, 0, 0, "a") < SemanticVersion(1, 0, 0, "b"))
+        XCTAssert(SemanticVersion(1, 0, 0, "a", "a") < SemanticVersion(1, 0, 0, "a", "b"))
     }
 
     func test_isStable() throws {
-        XCTAssert(SemVer(1, 0, 0).isStable)
-        XCTAssert(SemVer(1, 0, 0, "").isStable)
-        XCTAssert(SemVer(1, 0, 0, "", "").isStable)
-        XCTAssertFalse(SemVer(1, 0, 0, "a").isStable)
-        XCTAssertFalse(SemVer(1, 0, 0, "", "a").isStable)
+        XCTAssert(SemanticVersion(1, 0, 0).isStable)
+        XCTAssert(SemanticVersion(1, 0, 0, "").isStable)
+        XCTAssert(SemanticVersion(1, 0, 0, "", "").isStable)
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "a").isStable)
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "", "a").isStable)
     }
 
     func test_isMajorRelease() throws {
-        XCTAssertTrue(SemVer(1, 0, 0).isMajorRelease)
-        XCTAssertFalse(SemVer(1, 0, 0, "b").isMajorRelease)
-        XCTAssertFalse(SemVer(0, 0, 1).isMajorRelease)
-        XCTAssertFalse(SemVer(0, 0, 1, "b").isMajorRelease)
-        XCTAssertFalse(SemVer(0, 1, 0).isMajorRelease)
-        XCTAssertFalse(SemVer(0, 1, 0, "b").isMajorRelease)
-        XCTAssertFalse(SemVer(0, 1, 1).isMajorRelease)
-        XCTAssertFalse(SemVer(0, 0, 0).isMajorRelease)
+        XCTAssertTrue(SemanticVersion(1, 0, 0).isMajorRelease)
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "b").isMajorRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 1).isMajorRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 1, "b").isMajorRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 0).isMajorRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 0, "b").isMajorRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 1).isMajorRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 0).isMajorRelease)
     }
 
     func test_isMinorRelease() throws {
-        XCTAssertFalse(SemVer(1, 0, 0).isMinorRelease)
-        XCTAssertFalse(SemVer(1, 0, 0, "b").isMinorRelease)
-        XCTAssertFalse(SemVer(0, 0, 1).isMinorRelease)
-        XCTAssertFalse(SemVer(0, 0, 1, "b").isMinorRelease)
-        XCTAssertTrue(SemVer(0, 1, 0).isMinorRelease)
-        XCTAssertFalse(SemVer(0, 1, 0, "b").isMinorRelease)
-        XCTAssertFalse(SemVer(0, 1, 1).isMinorRelease)
-        XCTAssertFalse(SemVer(0, 0, 0).isMinorRelease)
+        XCTAssertFalse(SemanticVersion(1, 0, 0).isMinorRelease)
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "b").isMinorRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 1).isMinorRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 1, "b").isMinorRelease)
+        XCTAssertTrue(SemanticVersion(0, 1, 0).isMinorRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 0, "b").isMinorRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 1).isMinorRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 0).isMinorRelease)
     }
 
     func test_isPatchRelease() throws {
-        XCTAssertFalse(SemVer(1, 0, 0).isPatchRelease)
-        XCTAssertFalse(SemVer(1, 0, 0, "b").isPatchRelease)
-        XCTAssertTrue(SemVer(0, 0, 1).isPatchRelease)
-        XCTAssertFalse(SemVer(0, 0, 1, "b").isPatchRelease)
-        XCTAssertFalse(SemVer(0, 1, 0).isPatchRelease)
-        XCTAssertFalse(SemVer(0, 1, 0, "b").isPatchRelease)
-        XCTAssertTrue(SemVer(0, 1, 1).isPatchRelease)
-        XCTAssertFalse(SemVer(0, 0, 0).isPatchRelease)
+        XCTAssertFalse(SemanticVersion(1, 0, 0).isPatchRelease)
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "b").isPatchRelease)
+        XCTAssertTrue(SemanticVersion(0, 0, 1).isPatchRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 1, "b").isPatchRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 0).isPatchRelease)
+        XCTAssertFalse(SemanticVersion(0, 1, 0, "b").isPatchRelease)
+        XCTAssertTrue(SemanticVersion(0, 1, 1).isPatchRelease)
+        XCTAssertFalse(SemanticVersion(0, 0, 0).isPatchRelease)
     }
 
 }

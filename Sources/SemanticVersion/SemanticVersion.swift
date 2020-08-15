@@ -1,7 +1,7 @@
 import Foundation
 
 
-struct SemVer: Codable, Equatable, Hashable {
+struct SemanticVersion: Codable, Equatable, Hashable {
     var major: Int
     var minor: Int
     var patch: Int
@@ -18,7 +18,7 @@ struct SemVer: Codable, Equatable, Hashable {
 }
 
 
-extension SemVer: LosslessStringConvertible {
+extension SemanticVersion: LosslessStringConvertible {
     init?(_ string: String) {
         let groups = semVerRegex.matchGroups(string)
         guard
@@ -38,8 +38,8 @@ extension SemVer: LosslessStringConvertible {
 }
 
 
-extension SemVer: Comparable {
-    static func < (lhs: SemVer, rhs: SemVer) -> Bool {
+extension SemanticVersion: Comparable {
+    static func < (lhs: Self, rhs: Self) -> Bool {
         if lhs.major != rhs.major { return lhs.major < rhs.major }
         if lhs.minor != rhs.minor { return lhs.minor < rhs.minor }
         if lhs.patch != rhs.patch { return lhs.patch < rhs.patch }
@@ -51,7 +51,7 @@ extension SemVer: Comparable {
 }
 
 
-extension SemVer {
+extension SemanticVersion {
     var isStable: Bool { preRelease.isEmpty && build.isEmpty }
     var isPreRelease: Bool { !isStable }
     var isMajorRelease: Bool { isStable && (major > 0 && minor == 0 && patch == 0) }
