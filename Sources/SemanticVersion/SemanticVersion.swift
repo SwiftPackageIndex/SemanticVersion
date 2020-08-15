@@ -1,14 +1,14 @@
 import Foundation
 
 
-struct SemanticVersion: Codable, Equatable, Hashable {
-    var major: Int
-    var minor: Int
-    var patch: Int
-    var preRelease: String
-    var build: String
+public struct SemanticVersion: Codable, Equatable, Hashable {
+    public var major: Int
+    public var minor: Int
+    public var patch: Int
+    public var preRelease: String
+    public var build: String
 
-    init(_ major: Int, _ minor: Int, _ patch: Int, _ preRelease: String = "", _ build: String = "") {
+    public init(_ major: Int, _ minor: Int, _ patch: Int, _ preRelease: String = "", _ build: String = "") {
         self.major = major
         self.minor = minor
         self.patch = patch
@@ -19,7 +19,7 @@ struct SemanticVersion: Codable, Equatable, Hashable {
 
 
 extension SemanticVersion: LosslessStringConvertible {
-    init?(_ string: String) {
+    public init?(_ string: String) {
         let groups = semVerRegex.matchGroups(string)
         guard
             groups.count == semVerRegex.numberOfCaptureGroups,
@@ -30,7 +30,7 @@ extension SemanticVersion: LosslessStringConvertible {
         self = .init(major, minor, patch, groups[3], groups[4])
     }
 
-    var description: String {
+    public var description: String {
         let pre = preRelease.isEmpty ? "" : "-" + preRelease
         let bld = build.isEmpty ? "" : "+" + build
         return "\(major).\(minor).\(patch)\(pre)\(bld)"
@@ -39,7 +39,7 @@ extension SemanticVersion: LosslessStringConvertible {
 
 
 extension SemanticVersion: Comparable {
-    static func < (lhs: Self, rhs: Self) -> Bool {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
         if lhs.major != rhs.major { return lhs.major < rhs.major }
         if lhs.minor != rhs.minor { return lhs.minor < rhs.minor }
         if lhs.patch != rhs.patch { return lhs.patch < rhs.patch }
@@ -52,12 +52,12 @@ extension SemanticVersion: Comparable {
 
 
 extension SemanticVersion {
-    var isStable: Bool { preRelease.isEmpty && build.isEmpty }
-    var isPreRelease: Bool { !isStable }
-    var isMajorRelease: Bool { isStable && (major > 0 && minor == 0 && patch == 0) }
-    var isMinorRelease: Bool { isStable && (minor > 0 && patch == 0) }
-    var isPatchRelease: Bool { isStable && patch > 0 }
-    var isInitialRelease: Bool { self == .init(0, 0, 0) }
+    public var isStable: Bool { preRelease.isEmpty && build.isEmpty }
+    public var isPreRelease: Bool { !isStable }
+    public var isMajorRelease: Bool { isStable && (major > 0 && minor == 0 && patch == 0) }
+    public var isMinorRelease: Bool { isStable && (minor > 0 && patch == 0) }
+    public var isPatchRelease: Bool { isStable && patch > 0 }
+    public var isInitialRelease: Bool { self == .init(0, 0, 0) }
 }
 
 
