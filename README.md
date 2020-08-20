@@ -36,7 +36,7 @@ v300.minor           // 0
 v300.patch           // 0
 v300.preRelease      // "rc1-test"
 
-// Compare versions
+// SemanticVersion is Comparable
 v123 < v200          // true
 SemanticVersion("2.0.0")! < SemanticVersion("2.0.0-b1")!  // true
 v123 == SemanticVersion("1.2.3")  // true
