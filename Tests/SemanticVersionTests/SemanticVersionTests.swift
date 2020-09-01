@@ -89,6 +89,8 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssertEqual(SemanticVersion("1.2.3-rc"), SemanticVersion(1, 2, 3, "rc"))
         XCTAssertEqual(SemanticVersion("v1.2.3-beta1"), SemanticVersion(1, 2, 3, "beta1"))
         XCTAssertEqual(SemanticVersion("v1.2.3-beta1+build5"), SemanticVersion(1, 2, 3, "beta1", "build5"))
+        XCTAssertEqual(SemanticVersion("1.2.3-beta-foo"), SemanticVersion(1, 2, 3, "beta-foo"))
+        XCTAssertEqual(SemanticVersion("1.2.3-beta-foo+build-42"), SemanticVersion(1, 2, 3, "beta-foo", "build-42"))
         XCTAssertEqual(SemanticVersion(""), nil)
         XCTAssertEqual(SemanticVersion("1"), nil)
         XCTAssertEqual(SemanticVersion("1.2"), nil)
@@ -109,6 +111,14 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 0, 1))
         XCTAssert(SemanticVersion(1, 0, 0, "a") < SemanticVersion(1, 0, 0, "b"))
         XCTAssert(SemanticVersion(1, 0, 0, "a", "a") < SemanticVersion(1, 0, 0, "a", "b"))
+
+        // ensure betas come before releases
+        XCTAssert(SemanticVersion(1, 0, 0, "b1") < SemanticVersion(1, 0, 0))
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "b1") > SemanticVersion(1, 0, 0))
+        // but only if major/minor/patch are the same
+        XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 0, 1, "b1"))
+        // once the patch bumps up to the beta level again, it sorts higher
+        XCTAssert(SemanticVersion(1, 0, 1) > SemanticVersion(1, 0, 1, "b1"))
     }
 
     func test_isStable() throws {
