@@ -39,7 +39,7 @@ extension SemanticVersion: LosslessStringConvertible {
 
 
 extension SemanticVersion: Comparable {
-    public static func < (lhs: Self, rhs: Self) -> Bool {
+    public static func < (lhs: SemanticVersion, rhs: SemanticVersion) -> Bool {
         if lhs.major != rhs.major { return lhs.major < rhs.major }
         if lhs.minor != rhs.minor { return lhs.minor < rhs.minor }
         if lhs.patch != rhs.patch { return lhs.patch < rhs.patch }
@@ -57,12 +57,12 @@ extension SemanticVersion: Comparable {
 
 
 extension SemanticVersion {
-    public var isStable: Bool { preRelease.isEmpty && build.isEmpty }
-    public var isPreRelease: Bool { !isStable }
-    public var isMajorRelease: Bool { isStable && (major > 0 && minor == 0 && patch == 0) }
-    public var isMinorRelease: Bool { isStable && (minor > 0 && patch == 0) }
-    public var isPatchRelease: Bool { isStable && patch > 0 }
-    public var isInitialRelease: Bool { self == .init(0, 0, 0) }
+    public var isStable: Bool { return preRelease.isEmpty && build.isEmpty }
+    public var isPreRelease: Bool { return !isStable }
+    public var isMajorRelease: Bool { return isStable && (major > 0 && minor == 0 && patch == 0) }
+    public var isMinorRelease: Bool { return isStable && (minor > 0 && patch == 0) }
+    public var isPatchRelease: Bool { return isStable && patch > 0 }
+    public var isInitialRelease: Bool { return self == .init(0, 0, 0) }
 }
 
 
