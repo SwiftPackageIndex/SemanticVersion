@@ -1,3 +1,6 @@
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FSwiftPackageIndex%2FSemanticVersion%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/SwiftPackageIndex/SemanticVersion)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FSwiftPackageIndex%2FSemanticVersion%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/SwiftPackageIndex/SemanticVersion)
+
 # SemanticVersion
 
 SemanticVersion is a simple `Codable`, `Comparable`, `Equatable`, `Hashable`, and `LosslessStringConvertible` struct that can represent semantic versions.
