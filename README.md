@@ -43,7 +43,7 @@ v300rc1.preRelease      // "rc1-test"
 v123 < v200          // true
 SemanticVersion("2.0.0")! < SemanticVersion("2.0.1")!  // true
 // NB: beta versions come before their releases
-SemanticVersion("2.0.0")! < SemanticVersion("2.0.0-b1")!  // false
+SemanticVersion("2.0.0")! > SemanticVersion("2.0.0-b1")!  // true
 v123 == SemanticVersion("1.2.3")  // true
 SemanticVersion("v1.2.3-beta1+build5")
     == SemanticVersion(1, 2, 3, "beta1", "build5")  // true
