@@ -20,28 +20,30 @@ v123.isMinorRelease  // false
 v123.isPatchRelease  // true
 
 // Parse semantic version from String
-let v200 = SemanticVersion("2.0.0-b1")!
+let v200 = SemanticVersion("2.0.0")!
 v200.isStable        // true
 v200.isPreRelease    // false
-v200.isMajorRelease  // false
+v200.isMajorRelease  // true
 v200.isMinorRelease  // false
-v200.isPatchRelease  // true
+v200.isPatchRelease  // false
 
 // Supports beta versions
-let v300 = SemanticVersion("3.0.0-rc1-test")!
-v300.isStable        // false
-v300.isPreRelease    // true
-v300.isMajorRelease  // false
-v300.isMinorRelease  // false
-v300.isPatchRelease  // false
-v300.major           // 3
-v300.minor           // 0
-v300.patch           // 0
-v300.preRelease      // "rc1-test"
+let v300rc1 = SemanticVersion("3.0.0-rc1-test")!
+v300rc1.isStable        // false
+v300rc1.isPreRelease    // true
+v300rc1.isMajorRelease  // false
+v300rc1.isMinorRelease  // false
+v300rc1.isPatchRelease  // false
+v300rc1.major           // 3
+v300rc1.minor           // 0
+v300rc1.patch           // 0
+v300rc1.preRelease      // "rc1-test"
 
 // SemanticVersion is Comparable and Equatable
 v123 < v200          // true
-SemanticVersion("2.0.0")! < SemanticVersion("2.0.0-b1")!  // true
+SemanticVersion("2.0.0")! < SemanticVersion("2.0.1")!  // true
+// NB: beta versions ranke earlier than their releases
+SemanticVersion("2.0.0")! < SemanticVersion("2.0.0-b1")!  // false
 v123 == SemanticVersion("1.2.3")  // true
 SemanticVersion("v1.2.3-beta1+build5")
     == SemanticVersion(1, 2, 3, "beta1", "build5")  // true
@@ -50,7 +52,7 @@ SemanticVersion("v1.2.3-beta1+build5")
 let dict = [         // [{major 3, minor 0, patch 0,...
     v123: 1,
     v200: 2,
-    v300: 3
+    v300rc1: 3
 ]
 
 // SemanticVersion is Codable
