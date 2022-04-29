@@ -1,5 +1,7 @@
 version: 1
 builder:
   configs:
+  - platform: macos-spm
+    documentation_target: SemanticVersion
   - platform: watchos
-	scheme: SemanticVersion-watchOS
+    scheme: SemanticVersion-watchOS
