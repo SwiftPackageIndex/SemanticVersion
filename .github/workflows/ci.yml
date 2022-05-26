@@ -1,0 +1,29 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+
+  build-release:
+    strategy:
+      matrix:
+        # https://github.com/actions/virtual-environments
+        os: [macos-12, ubuntu-20.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - run: swift build --disable-automatic-resolution -c release
+
+  run-tests:
+    strategy:
+      matrix:
+        swift-version: [5.3, 5.4, 5.5, 5.6]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: fwal/setup-swift@v1
+        with:
+          swift-version: ${{ matrix.swift-version }}
+      - uses: actions/checkout@v2
+      - run: swift test
