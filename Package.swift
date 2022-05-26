@@ -25,7 +25,9 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "SemanticVersion", dependencies: []),
+        .target(name: "SemanticVersion",
+                dependencies: [],
+                resources: [.process("Documentation.docc")]),
         .testTarget(name: "SemanticVersionTests", dependencies: ["SemanticVersion"]),
     ]
 )
