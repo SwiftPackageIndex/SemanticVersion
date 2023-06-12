@@ -124,7 +124,8 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 1, 0))
         XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 0, 1))
         XCTAssert(SemanticVersion(1, 0, 0, "a") < SemanticVersion(1, 0, 0, "b"))
-        XCTAssert(SemanticVersion(1, 0, 0, "a", "a") < SemanticVersion(1, 0, 0, "a", "b"))
+        XCTAssertLessThan(SemanticVersion(1, 0, 0, "alpha.2"), SemanticVersion(1, 0, 0, "alpha.11"))
+        XCTAssertLessThan(SemanticVersion(1, 0, 0, "alpha.2"), SemanticVersion(1, 0, 0, "alpha.2.1"))
 
         // ensure betas come before releases
         XCTAssert(SemanticVersion(1, 0, 0, "b1") < SemanticVersion(1, 0, 0))
@@ -133,6 +134,11 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssert(SemanticVersion(1, 0, 0) < SemanticVersion(1, 0, 1, "b1"))
         // once the patch bumps up to the beta level again, it sorts higher
         XCTAssert(SemanticVersion(1, 0, 1) > SemanticVersion(1, 0, 1, "b1"))
+
+        // Ensure metadata is not considered
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "a", "a") < SemanticVersion(1, 0, 0, "a", "b"))
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "a", "a") > SemanticVersion(1, 0, 0, "a", "b"))
+        XCTAssertLessThan(SemanticVersion(1, 0, 0, "alpha", "build1"), SemanticVersion(1, 0, 0, "", "build1"))
     }
 
     func test_isStable() throws {
@@ -140,7 +146,8 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssert(SemanticVersion(1, 0, 0, "").isStable)
         XCTAssert(SemanticVersion(1, 0, 0, "", "").isStable)
         XCTAssertFalse(SemanticVersion(1, 0, 0, "a").isStable)
-        XCTAssertFalse(SemanticVersion(1, 0, 0, "", "a").isStable)
+        XCTAssertTrue(SemanticVersion(1, 0, 0, "", "a").isStable)
+        XCTAssertFalse(SemanticVersion(1, 0, 0, "a", "b").isStable)
     }
 
     func test_isMajorRelease() throws {

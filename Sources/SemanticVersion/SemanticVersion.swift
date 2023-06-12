@@ -43,6 +43,11 @@ public struct SemanticVersion: Codable, Equatable, Hashable {
         self.preRelease = preRelease
         self.build = build
     }
+
+    public enum PreReleaseIdentifier: Equatable {
+        case alphanumeric(String)
+        case numeric(Int)
+    }
 }
 
 
@@ -74,26 +79,81 @@ extension SemanticVersion: Comparable {
         if lhs.major != rhs.major { return lhs.major < rhs.major }
         if lhs.minor != rhs.minor { return lhs.minor < rhs.minor }
         if lhs.patch != rhs.patch { return lhs.patch < rhs.patch }
-        if lhs.preRelease != rhs.preRelease {
-            // Ensure stable versions sort after their betas ...
-            if lhs.isStable { return false }
-            if rhs.isStable { return true }
-            // ... otherwise sort by preRelease
-            return lhs.preRelease < rhs.preRelease
-        }
-        // ... and build
-        return lhs.build < rhs.build
+
+        // A stable release takes precedence over a pre-release
+        if lhs.isStable != rhs.isStable { return rhs.isStable }
+
+        // Otherwise compare the pre-releases per section 11.4
+        // See: https://semver.org/#spec-item-11
+        return lhs.preReleaseIdentifiers < rhs.preReleaseIdentifiers
+
+        // Note that per section 10, buildmetadata MUST not be
+        // considered when determining precedence
+        // See: https://semver.org/#spec-item-10
     }
 }
 
 
 extension SemanticVersion {
-    public var isStable: Bool { return preRelease.isEmpty && build.isEmpty }
+    public var isStable: Bool { return preRelease.isEmpty }
     public var isPreRelease: Bool { return !isStable }
     public var isMajorRelease: Bool { return isStable && (major > 0 && minor == 0 && patch == 0) }
     public var isMinorRelease: Bool { return isStable && (minor > 0 && patch == 0) }
     public var isPatchRelease: Bool { return isStable && patch > 0 }
     public var isInitialRelease: Bool { return self == .init(0, 0, 0) }
+
+    public var preReleaseIdentifiers: [PreReleaseIdentifier] {
+        return preRelease
+            .split(separator: ".")
+            .map { PreReleaseIdentifier(String($0)) }
+    }
+}
+
+extension SemanticVersion.PreReleaseIdentifier {
+    init(_ rawValue: String) {
+        if let number = Int(rawValue) {
+            self = .numeric(number)
+        } else {
+            self = .alphanumeric(rawValue)
+        }
+    }
+}
+
+extension SemanticVersion.PreReleaseIdentifier: Comparable {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        // These rules are laid out in section 11.4 of the semver spec
+        // See: https://semver.org/#spec-item-11
+        switch (lhs, rhs) {
+        case (.numeric, .alphanumeric):
+            // 11.4.3 - Numeric identifiers always have lower precedence than non-numeric identifiers
+            return true
+        case (.alphanumeric, .numeric):
+            // 11.4.3 - Numeric identifiers always have lower precedence than non-numeric identifiers
+            return false
+        case (.numeric(let lhInt), .numeric(let rhInt)):
+            // 11.4.1 - Identifiers consisting of only digits are compared numerically
+            return lhInt < rhInt
+        case (.alphanumeric(let lhString), .alphanumeric(let rhString)):
+            // 11.4.2 - Identifiers with letters or hyphens are compared lexically in ASCII sort order
+            return lhString < rhString
+        }
+    }
+}
+
+
+extension Array: Comparable where Element == SemanticVersion.PreReleaseIdentifier {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        // Per section 11.4 of the semver spec, compare left to right until a
+        // difference is found.
+        // See: https://semver.org/#spec-item-11
+        for (lhIdentifier, rhIdentifier) in zip(lhs, rhs) {
+            if lhIdentifier != rhIdentifier { return lhIdentifier < rhIdentifier }
+        }
+
+        // 11.4.4 - A larger set of identifiers will have a higher precendence
+        // than a smaller set, if all the preceding identifiers are equal.
+        return lhs.count < rhs.count
+    }
 }
 
 #if swift(>=5.5)
