@@ -3,5 +3,3 @@ builder:
   configs:
   - platform: macos-spm
     documentation_targets: [SemanticVersion]
-  - platform: watchos
-    scheme: SemanticVersion-watchOS
