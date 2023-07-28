@@ -96,6 +96,10 @@ extension SemanticVersion {
     public var isInitialRelease: Bool { return self == .init(0, 0, 0) }
 }
 
+#if swift(>=5.5)
+extension SemanticVersion: Sendable {}
+#endif
+
 
 // Source: https://regex101.com/r/Ly7O1x/3/
 // Linked from https://semver.org
