@@ -20,8 +20,6 @@ public enum SemanticVersionStrategy {
     /// Encode/decode the `SemanticVersion` to/fromfrom a string that conforms to the
     /// semantic version 2.0 specification at https://semver.org.
     case semverString
-
-    internal static let `default`: Self = .semverString
 }
 
 extension JSONEncoder {
@@ -33,7 +31,7 @@ extension JSONEncoder {
 }
 
 extension JSONDecoder {
-    /// The strategy to use in decoding semantic versions. Defaults to `.succint`.
+    /// The strategy to use in decoding semantic versions. Defaults to `.semverString`.
     public var semanticVersionDecodingStrategy: SemanticVersionStrategy {
         get { userInfo.semanticDecodingStrategy }
         set { userInfo.semanticDecodingStrategy = newValue }
@@ -43,7 +41,7 @@ extension JSONDecoder {
 private extension [CodingUserInfoKey: Any] {
     var semanticDecodingStrategy: SemanticVersionStrategy {
         get {
-            (self[.semanticVersionStrategy] as? SemanticVersionStrategy) ?? .default
+            (self[.semanticVersionStrategy] as? SemanticVersionStrategy) ?? .semverString
         }
         set {
             self[.semanticVersionStrategy] = newValue
