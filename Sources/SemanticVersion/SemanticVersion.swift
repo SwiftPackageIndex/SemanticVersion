@@ -50,26 +50,6 @@ public struct SemanticVersion: Equatable, Hashable {
     }
 }
 
-extension SemanticVersion: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        guard let version = SemanticVersion(try container.decode(String.self)) else {
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: container.codingPath,
-                    debugDescription: "Expected valid semver 2.0 string"
-                )
-            )
-        }
-        self = version
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(description)
-    }
-}
-
 extension SemanticVersion: LosslessStringConvertible {
 
     /// Initialize a version from a string. Returns `nil` if the string is not a semantic version.
