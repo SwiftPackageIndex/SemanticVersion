@@ -17,6 +17,7 @@ import XCTest
 
 final class SemanticVersionTests: XCTestCase {
 
+
     func test_semVerRegex_valid() throws {
         XCTAssert(semVerRegex.matches("0.0.4"))
         XCTAssert(semVerRegex.matches("1.2.3"))
@@ -51,8 +52,44 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssert(semVerRegex.matches("1.0.0-0A.is.legal"))
     }
 
+    func test_semVerPattern_valid() throws {
+        XCTAssert("0.0.4".contains(semVerPattern))
+        XCTAssert("0.0.4".contains(semVerPattern))
+        XCTAssert("1.2.3".contains(semVerPattern))
+        XCTAssert("10.20.30".contains(semVerPattern))
+        XCTAssert("1.1.2-prerelease+meta".contains(semVerPattern))
+        XCTAssert("1.1.2+meta".contains(semVerPattern))
+        XCTAssert("1.1.2+meta-valid".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha".contains(semVerPattern))
+        XCTAssert("1.0.0-beta".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha.beta".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha.beta.1".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha.1".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha0.valid".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha.0valid".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha-a.b-c-somethinglong+build.1-aef.1-its-okay".contains(semVerPattern))
+        XCTAssert("1.0.0-rc.1+build.1".contains(semVerPattern))
+        XCTAssert("2.0.0-rc.1+build.123".contains(semVerPattern))
+        XCTAssert("1.2.3-beta".contains(semVerPattern))
+        XCTAssert("10.2.3-DEV-SNAPSHOT".contains(semVerPattern))
+        XCTAssert("1.2.3-SNAPSHOT-123".contains(semVerPattern))
+        XCTAssert("1.0.0".contains(semVerPattern))
+        XCTAssert("2.0.0".contains(semVerPattern))
+        XCTAssert("1.1.7".contains(semVerPattern))
+        XCTAssert("2.0.0+build.1848".contains(semVerPattern))
+        XCTAssert("2.0.1-alpha.1227".contains(semVerPattern))
+        XCTAssert("1.0.0-alpha+beta".contains(semVerPattern))
+        XCTAssert("1.2.3----RC-SNAPSHOT.12.9.1--.12+788".contains(semVerPattern))
+        XCTAssert("1.2.3----R-S.12.9.1--.12+meta".contains(semVerPattern))
+        XCTAssert("1.2.3----RC-SNAPSHOT.12.9.1--.12".contains(semVerPattern))
+        XCTAssert("1.0.0+0.build.1-rc.10000aaa-kk-0.1".contains(semVerPattern))
+        XCTAssert("99999999999999999999999.999999999999999999.99999999999999999".contains(semVerPattern))
+        XCTAssert("1.0.0-0A.is.legal".contains(semVerPattern))
+    }
+
     func test_allow_leading_v() throws {
         XCTAssert(semVerRegex.matches("v0.0.4"))
+        XCTAssert("v0.0.4".contains(semVerPattern))
     }
 
     func test_semVerRegex_invalid() throws {
@@ -95,6 +132,48 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssertFalse(semVerRegex.matches("+justmeta"))
         XCTAssertFalse(semVerRegex.matches("9.8.7+meta+meta"))
         XCTAssertFalse(semVerRegex.matches("9.8.7-whatever+meta+meta"))
+    }
+
+    func test_semVerPattern_invalid() throws {
+        XCTAssertFalse("1".contains(semVerPattern))
+        XCTAssertFalse("1.2".contains(semVerPattern))
+        XCTAssertFalse("1.2.3-0123".contains(semVerPattern))
+        XCTAssertFalse("1.2.3-0123.0123".contains(semVerPattern))
+        XCTAssertFalse("1.1.2+.123".contains(semVerPattern))
+        XCTAssertFalse("+invalid".contains(semVerPattern))
+        XCTAssertFalse("-invalid".contains(semVerPattern))
+        XCTAssertFalse("-invalid+invalid".contains(semVerPattern))
+        XCTAssertFalse("-invalid.01".contains(semVerPattern))
+        XCTAssertFalse("alpha".contains(semVerPattern))
+        XCTAssertFalse("alpha.beta".contains(semVerPattern))
+        XCTAssertFalse("alpha.beta.1".contains(semVerPattern))
+        XCTAssertFalse("alpha.1".contains(semVerPattern))
+        XCTAssertFalse("alpha+beta".contains(semVerPattern))
+        XCTAssertFalse("alpha_beta".contains(semVerPattern))
+        XCTAssertFalse("alpha.".contains(semVerPattern))
+        XCTAssertFalse("alpha..".contains(semVerPattern))
+        XCTAssertFalse("beta".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha_beta".contains(semVerPattern))
+        XCTAssertFalse("-alpha.".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha..".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha..1".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha...1".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha....1".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha.....1".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha......1".contains(semVerPattern))
+        XCTAssertFalse("1.0.0-alpha.......1".contains(semVerPattern))
+        XCTAssertFalse("01.1.1".contains(semVerPattern))
+        XCTAssertFalse("1.01.1".contains(semVerPattern))
+        XCTAssertFalse("1.1.01".contains(semVerPattern))
+        XCTAssertFalse("1.2".contains(semVerPattern))
+        XCTAssertFalse("1.2.3.DEV".contains(semVerPattern))
+        XCTAssertFalse("1.2-SNAPSHOT".contains(semVerPattern))
+        XCTAssertFalse("1.2.31.2.3----RC-SNAPSHOT.12.09.1--..12+788".contains(semVerPattern))
+        XCTAssertFalse("1.2-RC-SNAPSHOT".contains(semVerPattern))
+        XCTAssertFalse("-1.0.3-gamma+b7718".contains(semVerPattern))
+        XCTAssertFalse("+justmeta".contains(semVerPattern))
+        XCTAssertFalse("9.8.7+meta+meta".contains(semVerPattern))
+        XCTAssertFalse("9.8.7-whatever+meta+meta".contains(semVerPattern))
     }
 
     func test_init() throws {
