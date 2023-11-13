@@ -38,7 +38,7 @@ extension JSONDecoder {
     }
 }
 
-private extension [CodingUserInfoKey: Any] {
+private extension Dictionary where Key == CodingUserInfoKey, Value == Any {
     var semanticDecodingStrategy: SemanticVersionStrategy {
         get {
             (self[.semanticVersionStrategy] as? SemanticVersionStrategy) ?? .defaultCodable
