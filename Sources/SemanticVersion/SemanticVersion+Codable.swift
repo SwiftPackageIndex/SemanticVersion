@@ -16,14 +16,14 @@ import Foundation
 
 public enum SemanticVersionStrategy {
     /// Encode/decode the `SemanticVersion` as a structure to/from a JSON object
-    case memberwise
+    case defaultCodable
     /// Encode/decode the `SemanticVersion` to/fromfrom a string that conforms to the
     /// semantic version 2.0 specification at https://semver.org.
     case semverString
 }
 
 extension JSONEncoder {
-    /// The strategy to use in decoding semantic versions. Defaults to `.semverString`.
+    /// The strategy to use in decoding semantic versions. Defaults to `.defaultCodable`.
     public var semanticVersionEncodingStrategy: SemanticVersionStrategy {
         get { userInfo.semanticDecodingStrategy }
         set { userInfo.semanticDecodingStrategy = newValue }
@@ -41,7 +41,7 @@ extension JSONDecoder {
 private extension [CodingUserInfoKey: Any] {
     var semanticDecodingStrategy: SemanticVersionStrategy {
         get {
-            (self[.semanticVersionStrategy] as? SemanticVersionStrategy) ?? .semverString
+            (self[.semanticVersionStrategy] as? SemanticVersionStrategy) ?? .defaultCodable
         }
         set {
             self[.semanticVersionStrategy] = newValue
@@ -64,7 +64,7 @@ extension SemanticVersion: Codable {
 
     public init(from decoder: Decoder) throws {
         switch decoder.userInfo.semanticDecodingStrategy {
-        case .memberwise:
+        case .defaultCodable:
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.major = try container.decode(Int.self, forKey: .major)
             self.minor = try container.decode(Int.self, forKey: .minor)
@@ -87,7 +87,7 @@ extension SemanticVersion: Codable {
 
     public func encode(to encoder: Encoder) throws {
         switch encoder.userInfo.semanticDecodingStrategy {
-        case .memberwise:
+        case .defaultCodable:
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(major, forKey: .major)
             try container.encode(minor, forKey: .minor)

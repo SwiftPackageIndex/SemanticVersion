@@ -56,7 +56,15 @@ let dict = [         // [{major 3, minor 0, patch 0,...
 ]
 
 // SemanticVersion is Codable
-// Note: the strategy defaults to `.semverString`
+// Note: the strategy defaults to `.defaultCodable`
+let defaultEncoder = JSONEncoder()
+defaultEncoder.semanticVersionEncodingStrategy = .defaultCodable
+let defaultDecoder = JSONDecoder()
+defaultDecoder.semanticVersionDecodingStrategy = .defaultCodable
+let defaultData = try defaultEncoder.encode(v123)  // 58 bytes
+let defaultDecoded = try defaultDecoder.decode(SemanticVersion.self, from: defaultData)  // 1.2.3
+defaultDecoded == v123  // true
+
 let stringEncoder = JSONEncoder()
 stringEncoder.semanticVersionEncodingStrategy = .semverString
 let stringDecoder = JSONDecoder()
@@ -64,12 +72,4 @@ stringDecoder.semanticVersionDecodingStrategy = .semverString
 let stringData = try stringEncoder.encode(v123) // 7 bytes -> "1.2.3", including quotes
 let stringDecoded = try stringDecoder.decode(SemanticVersion.self, from: stringData)  // 1.2.3
 stringDecoded == v123  // true
-
-let memberwiseEncoder = JSONEncoder()
-memberwiseEncoder.semanticVersionEncodingStrategy = .memberwise
-let memberwiseDecoder = JSONDecoder()
-memberwiseDecoder.semanticVersionDecodingStrategy = .memberwise
-let memberwiseData = try memberwiseEncoder.encode(v123)  // 58 bytes
-let memberwiseDecoded = try memberwiseDecoder.decode(SemanticVersion.self, from: memberwiseData)  // 1.2.3
-memberwiseDecoded == v123  // true
 ```

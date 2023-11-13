@@ -10,9 +10,9 @@ import XCTest
 import SemanticVersion
 
 final class SemanticVersionCodingTests: XCTestCase {
-    func test_semverString_is_default() throws {
-        XCTAssertEqual(.semverString, JSONEncoder().semanticVersionEncodingStrategy)
-        XCTAssertEqual(.semverString, JSONDecoder().semanticVersionDecodingStrategy)
+    func test_defaultCodable_is_default() throws {
+        XCTAssertEqual(.defaultCodable, JSONEncoder().semanticVersionEncodingStrategy)
+        XCTAssertEqual(.defaultCodable, JSONDecoder().semanticVersionDecodingStrategy)
     }
 
     func test_encodable_semverString() throws {
@@ -34,11 +34,11 @@ final class SemanticVersionCodingTests: XCTestCase {
         XCTAssertEqual(actual, #""7.7.7-beta.423+build.17""#)
     }
 
-    func test_encodable_memberwise() throws {
+    func test_encodable_defaultCodable() throws {
         let encoder = JSONEncoder()
         var actual: String
 
-        encoder.semanticVersionEncodingStrategy = .memberwise
+        encoder.semanticVersionEncodingStrategy = .defaultCodable
 
         actual = String(data: try encoder.encode(SemanticVersion(1, 2, 3)), encoding: .utf8)!
         XCTAssertTrue(actual.contains(#""major":1"#))
@@ -109,11 +109,11 @@ final class SemanticVersionCodingTests: XCTestCase {
         }
     }
 
-    func test_decodable_memberwise() throws {
+    func test_decodable_defaultCodable() throws {
         let decoder = JSONDecoder()
         var json: Data
 
-        decoder.semanticVersionDecodingStrategy = .memberwise
+        decoder.semanticVersionDecodingStrategy = .defaultCodable
 
         json = """
         {
