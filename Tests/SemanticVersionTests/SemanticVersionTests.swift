@@ -178,5 +178,4 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssertTrue(SemanticVersion(0, 1, 1).isPatchRelease)
         XCTAssertFalse(SemanticVersion(0, 0, 0).isPatchRelease)
     }
-
 }

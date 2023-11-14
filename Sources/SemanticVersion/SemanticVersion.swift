@@ -22,7 +22,7 @@ import Foundation
 /// 2. MINOR version when you add functionality in a backwards compatible manner, and
 /// PATCH version when you make backwards compatible bug fixes.
 /// Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
-public struct SemanticVersion: Codable, Equatable, Hashable {
+public struct SemanticVersion: Equatable, Hashable {
     public var major: Int
     public var minor: Int
     public var patch: Int
@@ -49,7 +49,6 @@ public struct SemanticVersion: Codable, Equatable, Hashable {
         case numeric(Int)
     }
 }
-
 
 extension SemanticVersion: LosslessStringConvertible {
 
