@@ -55,14 +55,14 @@ extension SemanticVersion: LosslessStringConvertible {
     /// Initialize a version from a string. Returns `nil` if the string is not a semantic version.
     /// - Parameter string: Version string.
     public init?(_ string: String) {
-        let groups = semVerRegex.matchGroups(string)
-        guard
-            groups.count == semVerRegex.numberOfCaptureGroups,
-            let major = Int(groups[0]),
-            let minor = Int(groups[1]),
-            let patch = Int(groups[2])
+        guard let match = string.wholeMatch(of: semVerPattern),
+              let major = Int(match.output.major),
+              let minor = Int(match.output.minor),
+              let patch = Int(match.output.patch)
         else { return nil }
-        self = .init(major, minor, patch, groups[3], groups[4])
+        let preRelease = match.output.prerelease.flatMap({String($0)}) ?? ""
+        let build = match.output.buildmetadata.flatMap({String($0)}) ?? ""
+        self = .init(major, minor, patch, preRelease, build)
     }
 
     public var description: String {
@@ -162,9 +162,9 @@ extension SemanticVersion: Sendable {}
 
 // Source: https://regex101.com/r/Ly7O1x/3/
 // Linked from https://semver.org
-#if swift(>=5)
 
-let semVerRegex = NSRegularExpression(#"""
+
+let semVerPattern = ##/
 ^
 v?                              # SPI extension: allow leading 'v'
 (?<major>0|[1-9]\d*)
@@ -186,32 +186,4 @@ v?                              # SPI extension: allow leading 'v'
   *)
 )?
 $
-"""#, options: [.allowCommentsAndWhitespace])
-
-#else
-
-let semVerRegex = NSRegularExpression("""
-^
-v?                              # SPI extension: allow leading 'v'
-(?<major>0|[1-9]\\d*)
-\\.
-(?<minor>0|[1-9]\\d*)
-\\.
-(?<patch>0|[1-9]\\d*)
-(?:-
-  (?<prerelease>
-    (?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)
-    (?:\\.
-      (?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)
-    )
-  *)
-)?
-(?:\\+
-  (?<buildmetadata>[0-9a-zA-Z-]+
-    (?:\\.[0-9a-zA-Z-]+)
-  *)
-)?
-$
-""", options: [.allowCommentsAndWhitespace])
-
-#endif
+/##
