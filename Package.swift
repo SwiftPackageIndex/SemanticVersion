@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.7
 
 // Copyright Dave Verwer, Sven A. Schmidt, and other contributors.
 //
@@ -18,6 +18,12 @@ import PackageDescription
 
 let package = Package(
     name: "SemanticVersion",
+    platforms: [
+        .iOS(.v16),
+        .macOS(.v13),
+        .watchOS(.v9),
+        .tvOS(.v16),
+    ],
     products: [
         .library(
             name: "SemanticVersion",

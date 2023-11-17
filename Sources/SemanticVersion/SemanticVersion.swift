@@ -55,36 +55,14 @@ extension SemanticVersion: LosslessStringConvertible {
     /// Initialize a version from a string. Returns `nil` if the string is not a semantic version.
     /// - Parameter string: Version string.
     public init?(_ string: String) {
-#if swift(>=5.7)
-        if #available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *) {
-            guard let match = string.wholeMatch(of: semVerPattern),
-                  let major = Int(match.output.major),
-                  let minor = Int(match.output.minor),
-                  let patch = Int(match.output.patch)
-            else { return nil }
-            let preRelease = match.output.prerelease.flatMap({String($0)}) ?? ""
-            let build = match.output.buildmetadata.flatMap({String($0)}) ?? ""
-            self = .init(major, minor, patch, preRelease, build)
-        } else {
-            let groups = semVerRegex.matchGroups(string)
-            guard
-                groups.count == semVerRegex.numberOfCaptureGroups,
-                let major = Int(groups[0]),
-                let minor = Int(groups[1]),
-                let patch = Int(groups[2])
-            else { return nil }
-            self = .init(major, minor, patch, groups[3], groups[4])
-        }
-#else
-        let groups = semVerRegex.matchGroups(string)
-        guard
-            groups.count == semVerRegex.numberOfCaptureGroups,
-            let major = Int(groups[0]),
-            let minor = Int(groups[1]),
-            let patch = Int(groups[2])
+        guard let match = string.wholeMatch(of: semVerPattern),
+              let major = Int(match.output.major),
+              let minor = Int(match.output.minor),
+              let patch = Int(match.output.patch)
         else { return nil }
-        self = .init(major, minor, patch, groups[3], groups[4])
-#endif
+        let preRelease = match.output.prerelease.flatMap({String($0)}) ?? ""
+        let build = match.output.buildmetadata.flatMap({String($0)}) ?? ""
+        self = .init(major, minor, patch, preRelease, build)
     }
 
     public var description: String {
@@ -186,10 +164,6 @@ extension SemanticVersion: Sendable {}
 // Linked from https://semver.org
 
 
-#if swift(>=5)
-
-#if swift(>=5.7)
-@available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
 let semVerPattern = ##/
 ^
 v?                              # SPI extension: allow leading 'v'
@@ -213,56 +187,3 @@ v?                              # SPI extension: allow leading 'v'
 )?
 $
 /##
-#endif
-
-let semVerRegex = NSRegularExpression(#"""
-^
-v?                              # SPI extension: allow leading 'v'
-(?<major>0|[1-9]\d*)
-\.
-(?<minor>0|[1-9]\d*)
-\.
-(?<patch>0|[1-9]\d*)
-(?:-
-  (?<prerelease>
-    (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
-    (?:\.
-      (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
-    )
-  *)
-)?
-(?:\+
-  (?<buildmetadata>[0-9a-zA-Z-]+
-    (?:\.[0-9a-zA-Z-]+)
-  *)
-)?
-$
-"""#, options: [.allowCommentsAndWhitespace])
-
-#else
-
-let semVerRegex = NSRegularExpression("""
-^
-v?                              # SPI extension: allow leading 'v'
-(?<major>0|[1-9]\\d*)
-\\.
-(?<minor>0|[1-9]\\d*)
-\\.
-(?<patch>0|[1-9]\\d*)
-(?:-
-  (?<prerelease>
-    (?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)
-    (?:\\.
-      (?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)
-    )
-  *)
-)?
-(?:\\+
-  (?<buildmetadata>[0-9a-zA-Z-]+
-    (?:\\.[0-9a-zA-Z-]+)
-  *)
-)?
-$
-""", options: [.allowCommentsAndWhitespace])
-
-#endif
