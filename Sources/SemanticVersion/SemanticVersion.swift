@@ -140,7 +140,7 @@ extension SemanticVersion.PreReleaseIdentifier: Comparable {
 }
 
 
-extension Array: Comparable where Element == SemanticVersion.PreReleaseIdentifier {
+extension Array: @retroactive Comparable where Element == SemanticVersion.PreReleaseIdentifier {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         // Per section 11.4 of the semver spec, compare left to right until a
         // difference is found.

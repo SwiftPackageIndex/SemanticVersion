@@ -29,5 +29,6 @@ let package = Package(
                 dependencies: [],
                 resources: [.process("Documentation.docc")]),
         .testTarget(name: "SemanticVersionTests", dependencies: ["SemanticVersion"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5, .version("6")]
 )

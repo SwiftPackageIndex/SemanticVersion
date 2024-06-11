@@ -3,7 +3,7 @@
 
 # 🏷 SemanticVersion
 
-SemanticVersion is a simple `Codable`, `Comparable`, `Equatable`, `Hashable`, and `LosslessStringConvertible` struct that can represent semantic versions.
+SemanticVersion is a simple `Codable`, `Comparable`, `Equatable`, `Hashable`, `Sendable`, and `LosslessStringConvertible` struct that can represent semantic versions.
 
 Here's what using `SemanticVersion` looks like in practise:
 
