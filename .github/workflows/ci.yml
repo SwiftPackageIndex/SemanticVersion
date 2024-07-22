@@ -23,7 +23,6 @@ jobs:
   run-tests:
     strategy:
       matrix:
-        # We don't need anything specific in 5.10.1, but 5.10 collapses to 5.1 when `swift-setup` runs.
         swift-version: ['5.6', '5.7', '5.8', '5.9', '5.10']
     runs-on: ubuntu-20.04
     steps:
