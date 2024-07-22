@@ -13,17 +13,24 @@ jobs:
         os: [macos-12, ubuntu-20.04]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      - run: swift build --disable-automatic-resolution -c release
+        - uses: actions/checkout@v4
+        - uses: fwal/setup-swift@v2
+        - name: Echo Swift version
+          run: swift --version
+        - name: Check a Release build
+          run: swift build --disable-automatic-resolution -c release
 
   run-tests:
     strategy:
       matrix:
-        swift-version: [5.6, 5.7, 5.8, 5.9]
+        swift-version: ['5.6', '5.7', '5.8', '5.9', '5.10']
     runs-on: ubuntu-20.04
     steps:
-      - uses: fwal/setup-swift@v1
+      - uses: actions/checkout@v4
+      - uses: fwal/setup-swift@v2
         with:
           swift-version: ${{ matrix.swift-version }}
-      - uses: actions/checkout@v2
-      - run: swift test
+      - name: Echo Swift version
+        run: swift --version
+      - name: Test
+        run: swift test
