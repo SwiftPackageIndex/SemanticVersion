@@ -18,7 +18,12 @@ import PackageDescription
 
 let package = Package(
     name: "SemanticVersion",
-    platforms: [.macOS("13.0")],
+    platforms: [
+        .iOS("16.0"),
+        .macOS("13.0"),
+        .watchOS("9.0"),
+        .tvOS("16.0"),
+    ],
     products: [
         .library(
             name: "SemanticVersion",
