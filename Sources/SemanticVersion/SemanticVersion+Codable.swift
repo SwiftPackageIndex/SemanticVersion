@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if canImport(Foundation)
+
 import Foundation
 
 public enum SemanticVersionStrategy {
@@ -100,3 +102,5 @@ extension SemanticVersion: Codable {
         }
     }
 }
+
+#endif

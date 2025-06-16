@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         # https://github.com/actions/virtual-environments
-        os: [macos-12, ubuntu-20.04]
+        os: [macos-13, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     steps:
         - uses: actions/checkout@v4
@@ -23,8 +23,8 @@ jobs:
   run-tests:
     strategy:
       matrix:
-        swift-version: ['5.6', '5.7', '5.8', '5.9', '5.10']
-    runs-on: ubuntu-20.04
+        swift-version: ['5.10', '6.0', '6.1']
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: fwal/setup-swift@v2
