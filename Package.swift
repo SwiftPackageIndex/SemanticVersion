@@ -33,7 +33,13 @@ let package = Package(
     targets: [
         .target(name: "SemanticVersion",
                 dependencies: [],
-                resources: [.process("Documentation.docc")]),
+                resources: resources),
         .testTarget(name: "SemanticVersionTests", dependencies: ["SemanticVersion"]),
     ]
 )
+
+#if canImport(Foundation)
+let resources: [Resource] = [.process("Documentation.docc")]
+#else
+let resources: [Resource] = []
+#endif
