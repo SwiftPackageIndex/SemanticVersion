@@ -116,6 +116,7 @@ extension SemanticVersion.PreReleaseIdentifier: Comparable {
 }
 
 
+#if compiler(>=6)
 extension Array: @retroactive Comparable where Element == SemanticVersion.PreReleaseIdentifier {
     public static func < (lhs: Self, rhs: Self) -> Bool {
         // Per section 11.4 of the semver spec, compare left to right until a
@@ -130,6 +131,23 @@ extension Array: @retroactive Comparable where Element == SemanticVersion.PreRel
         return lhs.count < rhs.count
     }
 }
+#else
+extension Array: @retroactive Comparable where Element == SemanticVersion.PreReleaseIdentifier {
+    public static func < (lhs: Self, rhs: Self) -> Bool {
+        // Per section 11.4 of the semver spec, compare left to right until a
+        // difference is found.
+        // See: https://semver.org/#spec-item-11
+        for (lhIdentifier, rhIdentifier) in zip(lhs, rhs) {
+            if lhIdentifier != rhIdentifier { return lhIdentifier < rhIdentifier }
+        }
+
+        // 11.4.4 - A larger set of identifiers will have a higher precendence
+        // than a smaller set, if all the preceding identifiers are equal.
+        return lhs.count < rhs.count
+    }
+}
+#endif
+
 
 #if swift(>=5.5)
 extension SemanticVersion: Sendable {}
