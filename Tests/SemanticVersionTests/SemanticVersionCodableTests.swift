@@ -1,15 +1,24 @@
+// Copyright Dave Verwer, Sven A. Schmidt, and other contributors.
 //
-//  SemanticVersionCodingTests.swift
-//  
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//  Created by Chris Eplett on 11/3/23.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#if canImport(Foundation)
 
 import XCTest
 
 import SemanticVersion
 
-final class SemanticVersionCodingTests: XCTestCase {
+final class SemanticVersionCodableTests: XCTestCase {
     func test_defaultCodable_is_default() throws {
         XCTAssertEqual(.defaultCodable, JSONEncoder().semanticVersionEncodingStrategy)
         XCTAssertEqual(.defaultCodable, JSONDecoder().semanticVersionDecodingStrategy)
@@ -191,3 +200,5 @@ final class SemanticVersionCodingTests: XCTestCase {
         }
     }
 }
+
+#endif
