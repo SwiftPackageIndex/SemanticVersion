@@ -23,7 +23,7 @@ jobs:
   run-tests:
     strategy:
       matrix:
-        swift-version: ['5.10', '6.0', '6.1']
+        swift-version: ['6.0', '6.1', '6.2']
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
