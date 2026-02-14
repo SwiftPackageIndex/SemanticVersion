@@ -40,6 +40,12 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssertNotNil("1.0.0".wholeMatch(of: semVerRegex))
         XCTAssertNotNil("2.0.0".wholeMatch(of: semVerRegex))
         XCTAssertNotNil("1.1.7".wholeMatch(of: semVerRegex))
+        XCTAssertNotNil("01.1.1".wholeMatch(of: semVerRegex))
+        XCTAssertNotNil("1.01.1".wholeMatch(of: semVerRegex))
+        XCTAssertNotNil("1.1.01".wholeMatch(of: semVerRegex))
+        XCTAssertNotNil("001.1.1".wholeMatch(of: semVerRegex))
+        XCTAssertNotNil("1.001.1".wholeMatch(of: semVerRegex))
+        XCTAssertNotNil("1.1.001".wholeMatch(of: semVerRegex))
         XCTAssertNotNil("2.0.0+build.1848".wholeMatch(of: semVerRegex))
         XCTAssertNotNil("2.0.1-alpha.1227".wholeMatch(of: semVerRegex))
         XCTAssertNotNil("1.0.0-alpha+beta".wholeMatch(of: semVerRegex))
@@ -83,9 +89,6 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssertNil("1.0.0-alpha.....1".wholeMatch(of: semVerRegex))
         XCTAssertNil("1.0.0-alpha......1".wholeMatch(of: semVerRegex))
         XCTAssertNil("1.0.0-alpha.......1".wholeMatch(of: semVerRegex))
-        XCTAssertNil("01.1.1".wholeMatch(of: semVerRegex))
-        XCTAssertNil("1.01.1".wholeMatch(of: semVerRegex))
-        XCTAssertNil("1.1.01".wholeMatch(of: semVerRegex))
         XCTAssertNil("1.2".wholeMatch(of: semVerRegex))
         XCTAssertNil("1.2.3.DEV".wholeMatch(of: semVerRegex))
         XCTAssertNil("1.2-SNAPSHOT".wholeMatch(of: semVerRegex))
@@ -110,6 +113,8 @@ final class SemanticVersionTests: XCTestCase {
         XCTAssertEqual(SemanticVersion("1.2"), nil)
         XCTAssertEqual(SemanticVersion("1.2.3rc"), nil)
         XCTAssertEqual(SemanticVersion("swift-2.2-SNAPSHOT-2016-01-11-a"), nil)
+        XCTAssertEqual(SemanticVersion("01.02.03"), SemanticVersion(1, 2, 3))
+        XCTAssertEqual(SemanticVersion("001.002.003"), SemanticVersion(1, 2, 3))
     }
 
     func test_description() throws {
