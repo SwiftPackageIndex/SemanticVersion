@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         # https://github.com/actions/virtual-environments
-        os: [macos-13, ubuntu-24.04]
+        os: [macos-15, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     steps:
         - uses: actions/checkout@v6
