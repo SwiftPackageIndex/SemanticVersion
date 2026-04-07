@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if os(wasm) && swift(<6.3)
-import Foundation
-#endif
-
 
 extension SemanticVersion: LosslessStringConvertible {
 
