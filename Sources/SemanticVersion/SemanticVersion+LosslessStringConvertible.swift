@@ -42,11 +42,11 @@ extension SemanticVersion: LosslessStringConvertible {
 let semVerRegex = #/
     ^
     v?                              # SPI extension: allow leading 'v'
-    (?<major>0|[1-9]\d*)
+    (?<major>\d+)                   # SPI extension: allow leading 0
     \.
-    (?<minor>0|[1-9]\d*)
+    (?<minor>\d+)                   # SPI extension: allow leading 0
     \.
-    (?<patch>0|[1-9]\d*)
+    (?<patch>\d+)                   # SPI extension: allow leading 0
     (?:-
       (?<prerelease>
         (?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)
